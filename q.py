@@ -17,17 +17,18 @@ st.title("Hdfc gpt")
 # os.environ["OPENAI_API_KEY"]=os.getenv("OPENAI_API_KEY")
 os.environ["LANGCHAIN_TRACING_V2"]="true"
 os.environ["LANGCHAIN_API_KEY"]='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'
-os.environ["OPENAI_API_KEY"]='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'
+os.environ["OPENAI_API_KEY"]='sk-proj-RAk5bGLUQFVp25UWdDz8T3BlbkFJSW0zvaG5BfdnDqMGQfaZ'
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import FAISS
 loader = PyPDFLoader("Vehicle Finance.pdf")
 # data = loader.load_and_split()
 dataLoad = loader.load()
 
 text_spliter = RecursiveCharacterTextSplitter()
 text = text_spliter.split_documents(dataLoad)
-db = Chroma.from_documents(text, OpenAIEmbeddings())
+db = FAISS.from_documents(text, OpenAIEmbeddings())
 # db = Chroma(persist_directory="Rupyy", embedding_function=OpenAIEmbeddings())
 llm = Ollama(model="llama3")
 
