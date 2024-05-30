@@ -11,11 +11,13 @@ import streamlit as st
 import os 
 from dotenv import load_dotenv
 
-st.title("Quran gpt")
+st.title("Hdfc gpt")
 
-os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
-os.environ["OPENAI_API_KEY"]=os.getenv("OPENAI_API_KEY")
+# os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
+# os.environ["OPENAI_API_KEY"]=os.getenv("OPENAI_API_KEY")
 os.environ["LANGCHAIN_TRACING_V2"]="true"
+os.environ["LANGCHAIN_API_KEY"]='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'
+os.environ["OPENAI_API_KEY"]='sk-proj-zYZjY4CDqHgjSkemPgXrT3BlbkFJCr2dktVCCD1ddJS3v602'
 
 db = Chroma(persist_directory="Rupyy", embedding_function=OpenAIEmbeddings())
 llm = Ollama(model="llama3")
