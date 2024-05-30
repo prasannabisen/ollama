@@ -17,9 +17,18 @@ st.title("Hdfc gpt")
 # os.environ["OPENAI_API_KEY"]=os.getenv("OPENAI_API_KEY")
 os.environ["LANGCHAIN_TRACING_V2"]="true"
 os.environ["LANGCHAIN_API_KEY"]='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'
-os.environ["OPENAI_API_KEY"]='sk-proj-zYZjY4CDqHgjSkemPgXrT3BlbkFJCr2dktVCCD1ddJS3v602'
+os.environ["OPENAI_API_KEY"]='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'
 
-db = Chroma(persist_directory="Rupyy", embedding_function=OpenAIEmbeddings())
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+loader = PyPDFLoader("Vehicle Finance.pdf")
+# data = loader.load_and_split()
+dataLoad = loader.load()
+
+text_spliter = RecursiveCharacterTextSplitter()
+text = text_spliter.split_documents(dataLoad)
+db = Chroma.from_documents(text, OpenAIEmbeddings())
+# db = Chroma(persist_directory="Rupyy", embedding_function=OpenAIEmbeddings())
 llm = Ollama(model="llama3")
 
 prompt = ChatPromptTemplate.from_template('''Answer the following question only on context provided and give detailed answer and also references of the answer
