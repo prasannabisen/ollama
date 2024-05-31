@@ -1,34 +1,56 @@
+import streamlit as st
+import os
+from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
-from langchain_community.llms.openai import OpenAI
+from langchain_community.vectorstores import FAISS
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
-import numpy as np
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.llms import OpenAI
 
-import streamlit as st
-import os 
-from dotenv import load_dotenv
+# Load environment variables
+load_dotenv()
 
-st.title("Hdfc chat gpt llm")
+st.title("HDFC GPT")
 
-os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
-os.environ["OPENAI_API_KEY"]=os.getenv("OPENAI_API_KEY")
-os.environ["LANGCHAIN_TRACING_V2"]="true"
+# Set environment variables
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
+os.environ["LANGCHAIN_API_KEY"]='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'
+os.environ["OPENAI_API_KEY"]='sk-proj-oANbdKKOM8iwrg3FT4AjT3BlbkFJtTuGMqCZv4CyklnvmbjY'
 
-db = Chroma(persist_directory="Rupyy", embedding_function=OpenAIEmbeddings())
-llm = OpenAI(model_name="gpt-3.5-turbo")
+# Load and split PDF document
+loader = PyPDFLoader("Vehicle Finance.pdf")
+data_load = loader.load()
+text_splitter = RecursiveCharacterTextSplitter()
+texts = text_splitter.split_documents(data_load)
 
-# from langchain_community.llms import OpenAI
-# openai = OpenAI(model_name="gpt-3.5-turbo-instruct")
+# Create FAISS vector store from documents
+db = FAISS.from_documents(texts, OpenAIEmbeddings())
 
+# Use OpenAI's ChatGPT Turbo model
+llm = OpenAI(model="gpt-3.5-turbo")
 
-# prompt = ChatPromptTemplate.from_messages([])
-prompt = ChatPromptTemplate.from_template('''Answer the following question only on context provided <context>{context}</context> Question:{input}''')
-document_chain=create_stuff_documents_chain(llm, prompt)
-retriver = db.as_retriever()
-retrival_chain = create_retrieval_chain(retriver, document_chain)
+# Create prompt template
+prompt = ChatPromptTemplate.from_template('''
+    Answer the following question only on context provided and give detailed answer and also references of the answer
+    <context>
+    {context}
+    </context>
+    Question:{input}
+''')
+
+# Create document chain and retrieval chain
+document_chain = create_stuff_documents_chain(llm, prompt)
+retriever = db.as_retriever()
+retrieval_chain = create_retrieval_chain(retriever, document_chain)
+
+# Streamlit input and output
 input_data = st.text_input("Enter input text")
 if input_data:
-    result = retrival_chain.invoke({"input": input_data})
-    st.write("Result:", result["answer"])
+    try:
+        result = retrieval_chain.run({"input": input_data})
+        st.write("Result:", result["output"])
+    except Exception as e:
+        st.error(f"An error occurred: {e}")

@@ -1,6 +1,6 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import FAISS
 from langchain_community.llms import Ollama
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
@@ -17,11 +17,10 @@ st.title("Hdfc gpt")
 # os.environ["OPENAI_API_KEY"]=os.getenv("OPENAI_API_KEY")
 os.environ["LANGCHAIN_TRACING_V2"]="true"
 os.environ["LANGCHAIN_API_KEY"]='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'
-os.environ["OPENAI_API_KEY"]='sk-proj-RAk5bGLUQFVp25UWdDz8T3BlbkFJSW0zvaG5BfdnDqMGQfaZ'
+os.environ["OPENAI_API_KEY"]='sk-proj-oANbdKKOM8iwrg3FT4AjT3BlbkFJtTuGMqCZv4CyklnvmbjY'
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
 loader = PyPDFLoader("Vehicle Finance.pdf")
 # data = loader.load_and_split()
 dataLoad = loader.load()
