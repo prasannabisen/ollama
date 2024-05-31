@@ -17,7 +17,7 @@ st.title("Hdfc gpt")
 # os.environ["OPENAI_API_KEY"]=os.getenv("OPENAI_API_KEY")
 os.environ["LANGCHAIN_TRACING_V2"]="true"
 os.environ["LANGCHAIN_API_KEY"]='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'
-os.environ["OPENAI_API_KEY"]='sk-proj-oANbdKKOM8iwrg3FT4AjT3BlbkFJtTuGMqCZv4CyklnvmbjY'
+os.environ["OPENAI_API_KEY"]='sk-proj-fj44Db1RCy2a9AWcEIhvT3BlbkFJZF9h0f9oSYzZI8jx8feL'
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
