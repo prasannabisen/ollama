@@ -10,6 +10,12 @@ import numpy as np
 import streamlit as st
 import os 
 from dotenv import load_dotenv
+load_dotenv()
+import sqlite3
+print(sqlite3.sqlite_version)
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 st.title("Hdfc gpt")
 
