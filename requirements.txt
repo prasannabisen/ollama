@@ -18,5 +18,3 @@ langchain-groq
 wikipedia
 arxiv
 langchainhub
-pysqlite3
-pysqlite3-binary
